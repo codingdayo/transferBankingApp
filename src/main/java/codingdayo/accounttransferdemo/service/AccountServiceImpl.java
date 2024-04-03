@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -15,9 +16,34 @@ public class AccountServiceImpl implements AccountService{
     AccountRepository accountRepository;
 
     @Override
+    public Account findById(Long theId) {
+
+
+            Optional<Account> optionalAccount = accountRepository.findById(theId);
+
+            Account theAccount = null;
+
+            if (optionalAccount.isPresent()) {
+                theAccount = optionalAccount.get();
+            }
+            else {
+
+                throw new RuntimeException("Did not find Account with id - " + theId);
+            }
+
+            return theAccount;
+
+
+            //this didn't work because theBook.get() didn't have isPresent().
+            //Optional<Book> theBook = bookRepository.findById(theId);
+            //
+            //
+            //
+            //return theBook.get();
+    }
+
+    @Override
     public Account createAccount(Account account) {
-
-
 
 
         Account newAccount = Account.builder()
@@ -29,4 +55,36 @@ public class AccountServiceImpl implements AccountService{
         return accountRepository.save(newAccount);
 
     }
+
+    @Override
+    public Account deposit(Long id, BigDecimal amount) {
+        Account theAccount = accountRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("This Account doesn't exist"));
+
+        BigDecimal balance = theAccount.getAccountBalance().add(amount);
+        theAccount.setAccountBalance(balance);
+
+        return accountRepository.save(theAccount);
+    }
+
+    @Override
+    public Account withdraw(Long id, BigDecimal amount) {
+        Account theAccount = accountRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("This Account doesn't exist"));
+
+        BigDecimal balance = theAccount.getAccountBalance().subtract(amount);
+        theAccount.setAccountBalance(balance);
+
+        return accountRepository.save(theAccount);
+    }
+
+    //public AccountDto deposit(int id, double amount) {
+    //
+    //    Account theAccount = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Can't find the account"));
+    //
+    //    double theTotal = theAccount.getAccountBalance() + amount;
+    //    theAccount.setAccountBalance(theTotal);
+    //    Account savedAccount = accountRepository.save(theAccount);
+    //    return AccountMapper.mapToAccountDto(savedAccount);
+    //}
 }
