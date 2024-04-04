@@ -45,6 +45,10 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account createAccount(Account account) {
 
+        //This prevents duplication
+        if(accountRepository.existsByName(account.getName())){
+            throw new RuntimeException("Account Already exists");
+        }
 
         Account newAccount = Account.builder()
                 .name(account.getName())
@@ -76,6 +80,15 @@ public class AccountServiceImpl implements AccountService{
         theAccount.setAccountBalance(balance);
 
         return accountRepository.save(theAccount);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+        Account theAccount = accountRepository.findById(id).orElseThrow(()
+                -> new RuntimeException("This Account doesn't exist"));
+
+         accountRepository.deleteById(id);
     }
 
     //public AccountDto deposit(int id, double amount) {

@@ -58,15 +58,12 @@ public class AccountController {
 
     }
 
-    //@PostMapping
-    //public ResponseEntity<Book> createBook(@RequestBody Book book){
-    //
-    //
-    //
-    //    Book savedBook = bookService.createBook(book);
-    //
-    //    return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
-    //
-    //}
-    //
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id){
+
+        accountService.deleteById(id);
+
+        return  ResponseEntity.ok("Account has been deleted successfully");
+    }
+
 }

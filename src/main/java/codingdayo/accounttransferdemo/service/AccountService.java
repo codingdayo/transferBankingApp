@@ -15,8 +15,7 @@ public interface AccountService {
 
     Account withdraw(Long id, BigDecimal amount);
 
-
-    void deleteById
+    void deleteById(Long id);
 
 
 }
