@@ -1,22 +1,27 @@
 package codingdayo.accounttransferdemo.entity;
 
 import jakarta.persistence.Entity;
+
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "transaction")
 public class Transaction {
 
-        private String fromAccountNumber;
+        private Long transactionId;
 
-        private String toAccountNumber;
+        private String accountNumber;
 
-        private BigDecimal amount;
+        private BigDecimal transactionAmount;
+
+        private Timestamp transactionDateTime;
 
 
 }

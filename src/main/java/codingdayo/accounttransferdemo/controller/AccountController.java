@@ -1,6 +1,7 @@
 package codingdayo.accounttransferdemo.controller;
 
 import codingdayo.accounttransferdemo.entity.Account;
+
 import codingdayo.accounttransferdemo.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class AccountController {
         return new ResponseEntity<>(theAccount, HttpStatus.OK);
 
     }
+
 
     @PutMapping("{id}/deposit")
     public ResponseEntity<Account> deposit(@PathVariable Long id, @RequestBody Map<String, BigDecimal> request){
@@ -57,6 +59,11 @@ public class AccountController {
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
 
     }
+
+    // to transfer
+
+
+
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable Long id){
