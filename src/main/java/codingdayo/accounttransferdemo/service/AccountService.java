@@ -1,7 +1,8 @@
 package codingdayo.accounttransferdemo.service;
 
 import codingdayo.accounttransferdemo.entity.Account;
-import codingdayo.accounttransferdemo.entity.TransferRequest;
+import codingdayo.accounttransferdemo.entity.EnquiryRequest;
+
 
 import java.math.BigDecimal;
 
@@ -17,6 +18,8 @@ public interface AccountService {
     Account withdraw(Long id, BigDecimal amount);
 
     void deleteById(Long id);
+
+    Account balanceEnquiry(EnquiryRequest request);
 
 
 

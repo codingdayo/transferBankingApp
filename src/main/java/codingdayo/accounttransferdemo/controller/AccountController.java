@@ -2,6 +2,7 @@ package codingdayo.accounttransferdemo.controller;
 
 import codingdayo.accounttransferdemo.entity.Account;
 
+import codingdayo.accounttransferdemo.entity.EnquiryRequest;
 import codingdayo.accounttransferdemo.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/api/user")
 public class AccountController {
 
@@ -27,6 +28,12 @@ public class AccountController {
         return new ResponseEntity<>(theAccount, HttpStatus.OK);
 
     }
+
+    @GetMapping("balanceEnquiry")
+    public Account balanceEnquiry(@RequestBody EnquiryRequest request){
+
+        return accountService.balanceEnquiry(request)
+;    }
 
 
     @PutMapping("{id}/deposit")

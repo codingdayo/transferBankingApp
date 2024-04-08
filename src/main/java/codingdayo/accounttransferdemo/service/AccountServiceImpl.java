@@ -1,9 +1,11 @@
 package codingdayo.accounttransferdemo.service;
 
 import codingdayo.accounttransferdemo.entity.Account;
-import codingdayo.accounttransferdemo.entity.TransferRequest;
+
+import codingdayo.accounttransferdemo.entity.EnquiryRequest;
 import codingdayo.accounttransferdemo.repository.AccountRepository;
 import codingdayo.accounttransferdemo.utils.AccountUtils;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ public class AccountServiceImpl implements AccountService{
 
     @Autowired
     AccountRepository accountRepository;
+
+
 
     @Override
     public Account findById(Long theId) {
@@ -33,7 +37,6 @@ public class AccountServiceImpl implements AccountService{
             }
 
             return theAccount;
-
 
             //this didn't work because theBook.get() didn't have isPresent().
             //Optional<Book> theBook = bookRepository.findById(theId);
@@ -92,6 +95,21 @@ public class AccountServiceImpl implements AccountService{
          accountRepository.deleteById(id);
     }
 
+    @Override
+    public Account balanceEnquiry(EnquiryRequest request) {
+        Boolean isAccountExist = accountRepository.existsByAccountNumber(request.getAccountNumber());
+
+        if(!isAccountExist){
+            throw new RuntimeException("Account does not exists");
+        }
+
+        Account foundAccount = accountRepository.findByAccountNumber(request.getAccountNumber());
+        return Account.builder()
+                .name(foundAccount.getName())
+                .accountNumber(foundAccount.getAccountNumber())
+                .accountBalance(foundAccount.getAccountBalance())
+                .build();
+    }
 
 
     //public AccountDto deposit(int id, double amount) {
