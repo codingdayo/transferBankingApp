@@ -2,7 +2,9 @@ package codingdayo.accounttransferdemo.controller;
 
 import codingdayo.accounttransferdemo.entity.Account;
 
+import codingdayo.accounttransferdemo.entity.AccountResponse;
 import codingdayo.accounttransferdemo.entity.EnquiryRequest;
+import codingdayo.accounttransferdemo.entity.TransferRequest;
 import codingdayo.accounttransferdemo.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,6 +66,14 @@ public class AccountController {
         Account newAccount = accountService.createAccount(account);
 
         return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/transfer")
+    public AccountResponse tranfer(@RequestBody TransferRequest request){
+
+        return accountService.transfer(request);
+
 
     }
 

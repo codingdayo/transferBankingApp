@@ -2,7 +2,9 @@ package codingdayo.accounttransferdemo.service;
 
 import codingdayo.accounttransferdemo.entity.Account;
 
+import codingdayo.accounttransferdemo.entity.AccountResponse;
 import codingdayo.accounttransferdemo.entity.EnquiryRequest;
+import codingdayo.accounttransferdemo.entity.TransferRequest;
 import codingdayo.accounttransferdemo.repository.AccountRepository;
 import codingdayo.accounttransferdemo.utils.AccountUtils;
 import org.apache.catalina.User;
@@ -105,20 +107,55 @@ public class AccountServiceImpl implements AccountService{
 
         Account foundAccount = accountRepository.findByAccountNumber(request.getAccountNumber());
         return Account.builder()
+                .id(foundAccount.getId())
                 .name(foundAccount.getName())
                 .accountNumber(foundAccount.getAccountNumber())
                 .accountBalance(foundAccount.getAccountBalance())
                 .build();
     }
 
+    @Override
+    public AccountResponse transfer(TransferRequest request) {
+        //Get the account to debit
+        //check if the amount I'm debiting is not more than the current balance
+        //debit the account
+        //get the account to credit
+        //credit the acccount
 
-    //public AccountDto deposit(int id, double amount) {
-    //
-    //    Account theAccount = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Can't find the account"));
-    //
-    //    double theTotal = theAccount.getAccountBalance() + amount;
-    //    theAccount.setAccountBalance(theTotal);
-    //    Account savedAccount = accountRepository.save(theAccount);
-    //    return AccountMapper.mapToAccountDto(savedAccount);
-    //}
+        boolean isDestinationAccountExist = accountRepository.existsByAccountNumber(request.getDestinationAccountNumber());
+
+        if(!isDestinationAccountExist){
+            return AccountResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NOT_EXIST_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NOT_EXIST_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        Account getSourceAccount = accountRepository.findByAccountNumber(request.getSourceAccountNumber());
+        if(request.getAmount().compareTo(getSourceAccount.getAccountBalance()) > 0){
+            return AccountResponse.builder()
+                    .responseCode(AccountUtils.INSUFFICIENT_BALANCE_CODE)
+                    .responseMessage(AccountUtils.INSUFFICIENT_BALANCE_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        getSourceAccount.setAccountBalance(getSourceAccount.getAccountBalance().subtract(request.getAmount()));
+        accountRepository.save(getSourceAccount);
+
+        Account getDestinationAccount = accountRepository.findByAccountNumber(request.getDestinationAccountNumber());
+        getDestinationAccount.setAccountBalance(getDestinationAccount.getAccountBalance().add(request.getAmount()));
+        accountRepository.save(getDestinationAccount);
+
+        return AccountResponse.builder()
+                .responseCode(AccountUtils.TRANSFER_SUCCESSFUL_CODE)
+                .responseMessage(AccountUtils.TRANSFER_SUCCESSFUL_MESSAGE)
+                .accountInfo(null)
+                .build();
+
+
+    }
+
+
 }

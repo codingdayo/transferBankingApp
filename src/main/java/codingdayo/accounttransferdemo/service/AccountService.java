@@ -1,7 +1,9 @@
 package codingdayo.accounttransferdemo.service;
 
 import codingdayo.accounttransferdemo.entity.Account;
+import codingdayo.accounttransferdemo.entity.AccountResponse;
 import codingdayo.accounttransferdemo.entity.EnquiryRequest;
+import codingdayo.accounttransferdemo.entity.TransferRequest;
 
 
 import java.math.BigDecimal;
@@ -21,6 +23,7 @@ public interface AccountService {
 
     Account balanceEnquiry(EnquiryRequest request);
 
+    AccountResponse transfer(TransferRequest request);
 
 
 
