@@ -1,5 +1,4 @@
 ## Banking System - Spring Boot Application 💲🏦
-Welcome to the Banking System, a robust backend solution designed to provide seamless banking operations and financial management.
 
 ## Operations: 
 * Create an account
